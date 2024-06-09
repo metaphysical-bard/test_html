@@ -1,0 +1,44 @@
+<!--
+
+main.html
+
+-->
+
+<div id = "Date">日付と日時</div>
+<div id = "lat">緯度</div>
+<div id = "lon">経度</div>
+<div id = "alpha">z</div>
+<div id = "beta">x</div>
+<div id = "gamma">y</div>
+
+<script>
+  let obj = {
+    "pos" : {"latitude" : 0, "longitude" : 0},
+    "orientation" : {"alpha" : 0, "beta" : 0, "gamma" : 0}
+  }
+
+  function refresh_M(pos = obj.pos, orientation = obj.orientation) {
+    document.getElementById("Date").innerText = Date()
+
+    obj.pos = pos
+    document.getElementById("lat").innerText = obj.pos.latitude
+    document.getElementById("lon").innerText = obj.pos.longitude
+
+    obj.orientation = orientation
+    document.getElementById("alpha").innerText = obj.orientation.alpha + ": "
+    document.getElementById("beta").innerText = obj.orientation.beta + ": "
+    document.getElementById("gamma").innerText = obj.orientation.gamma + ": "
+
+    setTimeout(refresh_M, 10000)
+  }
+
+  refresh_M()
+
+  navigator.geolocation.watchPosition(
+    (pos) => { refresh_M(pos.coords) },
+    () => { console.log("位置情報を取得できません") }
+  )
+
+  addEventListener("deviceorientation", (orientation) => { refresh_M(undefined, orientation) })
+</script>
+
